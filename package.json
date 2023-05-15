@@ -3,12 +3,28 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "demo-to-file-stream": "node  demo/demo-to-file-stream.js",
+    "demo-sql-stream": "node  demo/demo-sql-stream.js",
+    "storage": "docker-compose up -d",
+    "storage:stop": "docker-compose stop",
+    "storage:destroy": "docker-compose down -v"
   },
   "engines": {
-    "node": ">=16"
+    "node": ">=18"
   },
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "chance": "^1.1.9",
+    "csv-parse": "^5.3.6",
+    "mkdirp": "^2.1.5",
+    "mysql2": "^3.2.0",
+    "sequelize": "^6.30.0"
+  },
+  "devDependencies": {
+    "sequelize-cli": "^6.6.0"
+  }
 }

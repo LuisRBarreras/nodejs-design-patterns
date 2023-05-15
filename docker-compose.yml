@@ -1,0 +1,12 @@
+version: '3.5'
+services:
+  summit-wealth-cluster:
+    image: mysql:5.7
+    container_name: local-demos-mysql
+    restart: unless-stopped
+    volumes:
+      - ./docker/db/init:/docker-entrypoint-initdb.d
+    environment:
+      MYSQL_ROOT_PASSWORD: password123
+    ports:
+      - "3309:3306" #host:container
