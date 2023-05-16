@@ -10,6 +10,7 @@ export default class GroupStream extends Transform {
 
   _transform (record, enc, cb) {
     this.accumulator.push(record)
+
     if (this.accumulator.length >= this.size) {
       this.push(this.accumulator)
       this.accumulator = []
@@ -20,6 +21,7 @@ export default class GroupStream extends Transform {
   _flush (cb) {
     if (this.accumulator.length > 0) {
       this.push(this.accumulator)
+      this.accumulator = []
     }
     cb()
   }
