@@ -2,7 +2,7 @@ import { Readable, pipeline } from 'stream'
 import SequelizeFactory from '../src/sequelize-factory.js'
 import InsertDBStream from '../src/patterns/streams/transforms/insert-db-streams.js'
 import GroupStream from '../src/patterns/streams/transforms/group-stream.js'
-import { loggerStream, stringifyDataFieldStream } from '../src/patterns/streams/transforms/helpers.js'
+import { loggerStreamV2, stringifyDataFieldStream } from '../src/patterns/streams/transforms/helpers.js'
 
 async function main () {
   const sequelize = await SequelizeFactory.create()
@@ -18,16 +18,17 @@ async function main () {
       { data: { name: 'black doe_3', accountNumber: '909876543_3' } }
     ]
 
+    const recordStream = Readable.from(records)
     const groupByFiveStream = new GroupStream(5)
     const insertDBStream = new InsertDBStream(sequelize, 'accounts')
-    const recordStream = Readable.from(records)
 
+    //  Pipe between streams forwarding errors and properly cleaning up
     await pipeline(
       recordStream,
       stringifyDataFieldStream,
       groupByFiveStream,
       insertDBStream,
-      loggerStream,
+      loggerStreamV2,
       (error) => {
         console.log('finished')
         if (error) {
@@ -36,7 +37,7 @@ async function main () {
         }
       })
 
-    return 'successfull'
+    return 'successful'
   } catch (error) {
     console.error(error)
     throw error

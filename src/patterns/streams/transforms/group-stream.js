@@ -8,21 +8,25 @@ export default class GroupStream extends Transform {
     this.accumulator = []
   }
 
-  _transform (record, enc, cb) {
+  _transform (record, enc, callback) {
     this.accumulator.push(record)
 
     if (this.accumulator.length >= this.size) {
       this.push(this.accumulator)
       this.accumulator = []
     }
-    cb()
+
+    // Necessary to invoke the callback() to
+    // indicate that the current record has been successfully processed
+    // and that the stream is ready to receive another record
+    callback()
   }
 
-  _flush (cb) {
+  _flush (callback) {
     if (this.accumulator.length > 0) {
       this.push(this.accumulator)
       this.accumulator = []
     }
-    cb()
+    callback()
   }
 }

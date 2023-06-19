@@ -1,5 +1,4 @@
 
-import { QueryTypes } from 'sequelize'
 import { Transform } from 'stream'
 
 export default class InsertDBStream extends Transform {
@@ -11,7 +10,7 @@ export default class InsertDBStream extends Transform {
     this.table = table
   }
 
-  _transform (records, enc, cb) {
+  _transform (records, enc, callback) {
     if (!Array.isArray(records)) {
       throw new Error('Record should be an array')
     }
@@ -26,7 +25,10 @@ export default class InsertDBStream extends Transform {
           }
         }))
 
-        cb()
+        // Necessary to invoke the callback() to
+        // indicate that the current record has been successfully processed
+        // and that the stream is ready to receive another record
+        callback()
       }).catch(error => {
         console.error(error)
         throw error
